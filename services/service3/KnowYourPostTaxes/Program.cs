@@ -69,5 +69,5 @@ app.Run();
 class TaxVM
 {
     [JsonPropertyName("name")] public string Name { get; set; }
-    [JsonPropertyName("taxrate")] public decimal(4, 3) TaxRate { get; set; }
+    [JsonPropertyName("taxrate")] public float TaxRate { get; set; }
 }
