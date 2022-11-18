@@ -33,9 +33,9 @@ namespace KnowYourPostTaxes.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("TaxRate")
+                    b.Property<float>("TaxRate")
                         .IsRequired()
-                        .HasColumnType("decimal(4, 3)");
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
