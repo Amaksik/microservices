@@ -14,4 +14,11 @@ public class TaxContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
     }
+    
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Tax>()
+            .HasIndex(e => e.CountryName)
+            .IsUnique();
+    }
 }

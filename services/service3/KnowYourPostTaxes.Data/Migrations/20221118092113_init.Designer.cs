@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace KnowYourPostTaxes.Data.Migrations
 {
     [DbContext(typeof(TaxContext))]
-    [Migration("20221111162336_init")]
+    [Migration("20221118092113_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -31,15 +31,17 @@ namespace KnowYourPostTaxes.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Name")
+                    b.Property<string>("CountryName")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("TaxRate")
-                        .IsRequired()
-                        .HasColumnType("decimal(4, 3)");
+                    b.Property<decimal>("TaxRate")
+                        .HasColumnType("numeric");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CountryName")
+                        .IsUnique();
 
                     b.ToTable("Taxes");
                 });

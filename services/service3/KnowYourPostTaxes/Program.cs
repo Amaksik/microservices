@@ -34,7 +34,7 @@ using (var scope = app.Services.CreateScope())
 
 app.MapPost("/tax", (TaxVM tax, TaxContext context) =>
 {
-    context.Taxes.Add(new Tax(tax.Name, tax.TaxRate));
+    context.Taxes.Add(new Tax(tax.CountryName, tax.TaxRate));
     context.SaveChanges();
     return Results.Ok();
 });
@@ -50,7 +50,7 @@ app.MapGet("/tax/{id}", (int id, TaxContext context) =>
 
 app.MapPost("/tax/exists", (TaxVM tax, TaxContext context) =>
 {
-    var exists = context.Taxs.Any(t => t.Name == tax.Name && t.TaxRate == tax.TaxRate);
+    var exists = context.Taxes.Any(t => t.CountryName == tax.CountryName && t.TaxRate == tax.TaxRate);
     return Results.Ok(exists);
 });
 
@@ -68,6 +68,6 @@ app.Run();
 
 class TaxVM
 {
-    [JsonPropertyName("name")] public string Name { get; set; }
-    [JsonPropertyName("taxrate")] public decimal(4, 3) TaxRate { get; set; }
+    [JsonPropertyName("country_name")] public string CountryName { get; set; }
+    [JsonPropertyName("taxrate")] public decimal TaxRate { get; set; }
 }

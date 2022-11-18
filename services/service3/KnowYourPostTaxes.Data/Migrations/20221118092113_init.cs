@@ -15,14 +15,19 @@ namespace KnowYourPostTaxes.Data.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    TaxRate = table.Column<string>(type: "decimal(4, 3)", nullable: false)
+                    CountryName = table.Column<string>(type: "text", nullable: false),
+                    TaxRate = table.Column<decimal>(type: "numeric", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Taxes", t => t.Id);
+                    table.PrimaryKey("PK_Taxes", x => x.Id);
                 });
 
+            migrationBuilder.CreateIndex(
+                name: "IX_Taxes_CountryName",
+                table: "Taxes",
+                column: "CountryName",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
