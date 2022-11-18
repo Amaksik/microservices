@@ -42,9 +42,9 @@ app.MapPost("/tax", (TaxVM tax, TaxContext context) =>
 app.MapGet("/tax", (TaxContext context) => 
     context.Taxes.ToList());
 
-app.MapGet("/tax/{id}", (int id, TaxContext context) =>
+app.MapGet("/tax/{country_name}", (string CountryName, TaxContext context) =>
 {
-    var tax = context.Taxes.Find(id);
+    var tax = context.Taxes.Find(CountryName);
     return tax == null ? Results.NotFound() : Results.Ok(tax);
 });
 
