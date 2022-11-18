@@ -16,7 +16,7 @@ namespace KnowYourPostTaxes.Data.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: false),
-                    TaxRate = table.Column<string>(type: "decimal(4, 3)", nullable: false)
+                    TaxRate = table.Column<float>(type: "float", nullable: false)
                 },
                 constraints: table =>
                 {
