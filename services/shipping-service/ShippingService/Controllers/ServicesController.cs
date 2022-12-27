@@ -1,12 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Org.BouncyCastle.Security;
 using ShippingService.DAL;
 using ShippingService.DTO;
 using ShippingService.Entities;
-using System.Configuration;
-using System.Xml.Linq;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace ShippingService.Controllers
 {
@@ -20,58 +16,50 @@ namespace ShippingService.Controllers
             this.DBContext = DBContext;
         }
 
-        [HttpGet]
-        [Route("{code}")]
-        public async Task<ActionResult<List<CompanyDTO>>> GetCompany(string code)
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> PostRate(Rate rate)
         {
-            var companies = await DBContext.Companies.ToListAsync();
-            var rates = await DBContext.Rates.Where(p => p.OriginId == code.ToUpper()).ToListAsync();
+            DBContext.Rates.Add(rate);
+            await DBContext.SaveChangesAsync();
+            return Ok(new { id = rate.Id });
+        }
 
-            var result = CreateRatesDTO(rates, companies, code);
+        [HttpPost]
+        [Route("[action]")]
+        public async Task<IActionResult> PostCompany(Company company)
+        {
+            DBContext.Companies.Add(company);
+            await DBContext.SaveChangesAsync();
+            return Ok(new { id = company.Id });
+        }
 
-            if (result.Count < 0)
+
+        [HttpGet]
+        [Route("{originId}/{destId}")]
+        public async Task<ActionResult<List<CompanyDTO>>> GetCompany(int originId, int destId)
+        {
+            var res = await DBContext.Rates
+                .Where(r => r.OriginId == originId && r.DestinationId == destId)
+                .Include(r => r.Origin)
+                .Include(r => r.Destination)
+                .Include(r => r.Company)
+                .Select(r => new CompanyDTO
+                {
+                    CompanyID = r.CompanyId,
+                    Name = r.Company.Name,
+                    Rate = r.Price
+                })
+                .ToListAsync();
+            
+            if (res == null || res.Count == 0)
             {
                 return NotFound();
             }
             else
             {
-                return result;
+                return res;
             }
-        }
-
-        private List<CompanyDTO> CreateRatesDTO(List<Rate> rates, List<Company> companies, string code)
-        {
-            var result = new List<CompanyDTO>();
-
-            foreach(Company company in companies)
-            {
-                var newCompany = new CompanyDTO
-                {
-                    CompanyID= company.Id,
-                    Name = company.Name,
-                    Rates = new List<RateDTO>()
-                };
-                result.Add(newCompany);
-            }
-            foreach (Rate rate in rates)
-            {
-                var element = result.Where(p=>p.CompanyID==rate.CompanyId).Single();
-                
-                element.Rates = rates.Where(p => p.CompanyId == element.CompanyID)
-                    .Select(e=>new RateDTO
-                    {
-                        Rate = e.Price,
-                        Origin= e.OriginId,
-                        Destination= e.DestinationId
-                    
-
-                    }).ToList();
-            }
-            result.RemoveAll(p => p.Rates.Count == 0);
-
-            return result;
-
-
         }
     }
 }

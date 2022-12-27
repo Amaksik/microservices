@@ -31,30 +31,37 @@ namespace ShippingService.Controllers
                 return List;
             }
         }
+
+        [HttpPost]
+        public async Task<ActionResult<Country>> Post(Country country)
+        {
+            DBContext.Countries.Add(country);
+            await DBContext.SaveChangesAsync();
+            return CreatedAtAction(nameof(Get), new { id = country.Id }, country);
+        }
         
         [HttpGet]
         [Route("{id}")]
-        public async Task<ActionResult<dynamic>> Get(string id)
+        public async Task<ActionResult<dynamic>> Get(int id)
         {
             var rates = await DBContext.Rates.ToListAsync();
             var countries = await DBContext.Countries.ToListAsync();
 
-            var allowedDestinations = from r in rates
-                                      where r.OriginId == id
-                                      select r;
+            var allowedDestinations = await DBContext.Rates
+                .Include(p => p.Origin)
+                .Include(p => p.Destination)
+                .Where(p => p.OriginId == id)
+                .Select(p => new { name = p.Destination.Name, id = p.DestinationId })
+                .Distinct()
+                .ToListAsync();
 
-            var result = (from a in allowedDestinations
-                         join c in countries on a.DestinationId equals c.Code
-                         select new { name = c.Name, fullName = c.FullName, code = c.Code }).Distinct();
-
-            var response = result.ToList();
-            if (response.Count < 0)
+            if (allowedDestinations.Count < 0)
             {
                 return NotFound();
             }
             else
             {
-                return response;
+                return allowedDestinations;
             }
         }
     }

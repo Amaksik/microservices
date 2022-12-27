@@ -8,9 +8,9 @@ namespace HealthCheckController.Controllers
     {
 
         [HttpGet]
-        public async Task<ActionResult> Check()
+        public ActionResult Check()
         {
             return Ok("alive");
         }
-}
+    }
 }
