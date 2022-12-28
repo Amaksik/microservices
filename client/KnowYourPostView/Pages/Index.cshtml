@@ -6,5 +6,31 @@
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <form method="post" asp-page-handler="GetCompanies">
+        <label>
+            Origin: 
+            <select asp-for="@Model.CountryOrigin" asp-items="@Model.CountriesOrigin"></select>
+        </label>
+        <label>
+            Destination: 
+            <select asp-for="@Model.CountryDestination" asp-items="@Model.CountriesDestination"></select>
+        </label>
+        <input type="hidden" name="id" value="@Model.GetChosenString" />
+        <button type="submit" class="btn btn-primary">Get Providers</button>
+    </form>
+    <br />
+    <br />
+    <form method="post" asp-page-handler="Calculate">
+        <label>
+            Postal Service:
+            <select asp-for="@Model.PostalService" asp-items="@Model.PostalServices"></select>
+        </label>
+        <lable>
+            Pakcage weight kg:
+            <input type="number" asp-for="@Model.Weight" />
+        </lable>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    <p>Price: @Model.PriceProp</p>
+    <a asp-page="/"><button class="btn btn-primary">Refresh</button></a>
 </div>

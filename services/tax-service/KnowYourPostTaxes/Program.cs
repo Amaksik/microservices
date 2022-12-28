@@ -32,7 +32,7 @@ using (var scope = app.Services.CreateScope())
     context.Database.EnsureCreated();
 }
 
-app.MapPost("/tax", (TaxVM tax, TaxContext context) =>
+app.MapPost("/tax/new", (TaxVM tax, TaxContext context) =>
 {
     context.Taxes.Add(new Tax(tax.CountryName, tax.TaxRate));
     context.SaveChanges();
@@ -40,12 +40,12 @@ app.MapPost("/tax", (TaxVM tax, TaxContext context) =>
 });
 
 app.MapGet("/tax", (TaxContext context) => 
-    context.Taxes.ToList());
+    context.Taxes.Select(t => new { name = t.CountryName, tax = t.TaxRate }).ToList());
 
 app.MapPost("/tax", (TaxVM tax, TaxContext context) =>
 {
-    var tax = context.Taxes.Where(t => t.CountryName.ToLower() == tax.CountryName.ToLower()).FirstOrDefault();
-    return tax == null ? Results.NotFound() : Results.Ok(tax);
+    var res = context.Taxes.Where(t => t.CountryName.ToLower() == tax.CountryName.ToLower()).FirstOrDefault();
+    return res == null ? Results.NotFound() : Results.Ok(res);
 });
 
 app.MapPost("/tax/exists", (TaxVM tax, TaxContext context) =>

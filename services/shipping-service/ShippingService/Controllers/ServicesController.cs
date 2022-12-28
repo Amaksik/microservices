@@ -61,5 +61,20 @@ namespace ShippingService.Controllers
                 return res;
             }
         }
+
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<ActionResult<Company>> GetCompany(int id)
+        {
+            var res = await DBContext.Companies.FindAsync(id);
+            if (res == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return res;
+            }
+        }
     }
 }
