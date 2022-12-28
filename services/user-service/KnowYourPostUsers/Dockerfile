@@ -5,10 +5,11 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["KnowYourPostUsers.csproj", "./"]
-RUN dotnet restore "KnowYourPostUsers.csproj"
+COPY ["../KnowYourPostUsers/KnowYourPostUsers.csproj", "KnowYourPostUsers/"]
+COPY ["../KnowYourPostUsers.Data/KnowYourPostUsers.Data.csproj", "KnowYourPostUsers.Data/"]
+RUN dotnet restore "KnowYourPostUsers/KnowYourPostUsers.csproj"
 COPY . .
-WORKDIR "/src/"
+WORKDIR "/src/KnowYourPostUsers"
 RUN dotnet build "KnowYourPostUsers.csproj" -c Release -o /app/build
 
 FROM build AS publish

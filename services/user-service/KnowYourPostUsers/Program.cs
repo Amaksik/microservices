@@ -10,7 +10,10 @@ var user = Environment.GetEnvironmentVariable("DATABASE_USER");
 var password = Environment.GetEnvironmentVariable("DATABASE_PASSWORD");
 var database = Environment.GetEnvironmentVariable("DATABASE_NAME");
 
-var connectionString = $"Host={host};Database={database};Username={user};Password={password}";
+var connectionString = $"server={host};database={database};username={user};password={password}";
+Console.WriteLine(connectionString);
+Console.WriteLine(connectionString);
+
 // Add services to the container.
 builder.Services.AddDbContext<UserContext>(ops => 
     ops.UseNpgsql(connectionString));

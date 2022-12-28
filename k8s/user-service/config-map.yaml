@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: user-service-config
+data:
+  DATABASE_NAME: user-service
+  DATABASE_HOST: user-postgres

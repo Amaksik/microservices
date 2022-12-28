@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-service-deployment
+spec:
+  replicas: 1                      # кількість екземплярів Pod, що буде створено цим Deployment
+  selector:
+    matchLabels:
+      app: user-service                # селектор по якому Deployment зв'язаний з Pod
+  template:
+    metadata:
+      labels:
+        app: user-service               # мітка Pod по якому вона буде зв'язана з Deployment та Service
+    spec:
+      containers:
+        - image: user-service:1.0      # образ Docker
+          name: user-service           # ім'я контейнера
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 80  # порт по якому можна звертатись до поди
+          envFrom:
+            - configMapRef:
+                name: user-service-config
+            - secretRef:
+                name: user-service-secret
