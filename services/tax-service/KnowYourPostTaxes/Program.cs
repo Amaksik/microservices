@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 var host = Environment.GetEnvironmentVariable("DATABASE_HOST");
-var port = Environment.GetEnvironmentVariable("DATABASE_PORT");
 var user = Environment.GetEnvironmentVariable("DATABASE_USER");
 var password = Environment.GetEnvironmentVariable("DATABASE_PASSWORD");
 var database = Environment.GetEnvironmentVariable("DATABASE_NAME");
