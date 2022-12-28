@@ -5,9 +5,16 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var host = Environment.GetEnvironmentVariable("DATABASE_HOST");
+var port = Environment.GetEnvironmentVariable("DATABASE_PORT");
+var user = Environment.GetEnvironmentVariable("DATABASE_USER");
+var password = Environment.GetEnvironmentVariable("DATABASE_PASSWORD");
+var database = Environment.GetEnvironmentVariable("DATABASE_NAME");
+
+var connectionString = $"Host={host};Database={database};Username={user};Password={password}";
 // Add services to the container.
 builder.Services.AddDbContext<TaxContext>(ops => 
-    ops.UseNpgsql(builder.Configuration.GetSection("DbConnection").Value));
+    ops.UseNpgsql(connectionString));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
