@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tax-service-config
+data:
+  DATABASE_NAME: tax-service
+  DATABASE_HOST: tax-postgres

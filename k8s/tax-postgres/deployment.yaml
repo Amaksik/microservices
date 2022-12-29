@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tax-postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tax-postgres
+  template:
+    metadata:
+      labels:
+        app: tax-postgres
+    spec:
+      containers:
+        - name: tax-postgres
+          image: postgres:14.1-alpine3.15
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: 5432
+          envFrom:
+            - secretRef:
+                name: tax-postgres-secret
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: postgredb
+      volumes:
+        - name: postgredb
+          persistentVolumeClaim:
+            claimName: tax-postgres-volume-claim
