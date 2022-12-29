@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shipping-service-deployment
+spec:
+  replicas: 1                      # number of Pods to be created by Deployment
+  selector:
+    matchLabels:
+      app: shipping-service                # selector to connect Deployment with Pod
+  template:
+    metadata:
+      labels:
+        app: shipping-service               # tag for Pod to connect Deployment and Service
+    spec:
+      containers:
+        - image: shipping-service:1.0      # Docker
+          name: shipping-service           # container name
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 80  # port to call Pod
+          envFrom:
+            - configMapRef:
+                name: shipping-service-config
+            - secretRef:
+                name: shipping-service-secret

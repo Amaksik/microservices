@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shipping-postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: shipping-postgres
+  template:
+    metadata:
+      labels:
+        app: shipping-postgres
+    spec:
+      containers:
+        - name: shipping-postgres
+          image: postgres:14.1-alpine3.15
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: 5432
+          envFrom:
+            - secretRef:
+                name: shipping-postgres-secret
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: postgredb
+      volumes:
+        - name: postgredb
+          persistentVolumeClaim:
+            claimName: shipping-postgres-volume-claim

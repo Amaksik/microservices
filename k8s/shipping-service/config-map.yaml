@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: shipping-service-config
+data:
+  DATABASE_NAME: shipping-service
+  DATABASE_HOST: shipping-postgres
