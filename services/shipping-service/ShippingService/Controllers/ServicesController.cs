@@ -7,7 +7,7 @@ using ShippingService.Entities;
 namespace ShippingService.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/shipping-service/[controller]")]
     public class ServicesController : ControllerBase
     {
         private readonly shippingdbContext DBContext;
