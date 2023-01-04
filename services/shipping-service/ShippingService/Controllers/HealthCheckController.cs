@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace HealthCheckController.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("/api/shipping-service/[controller]")]
     public class HealthCheckController : ControllerBase
     {
 

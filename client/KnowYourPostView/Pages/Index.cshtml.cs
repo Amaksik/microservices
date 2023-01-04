@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace KnowYourPostView.Pages;
 
-[Authorize]
 public class IndexModel : PageModel
 {
     private readonly ILogger<IndexModel> _logger;

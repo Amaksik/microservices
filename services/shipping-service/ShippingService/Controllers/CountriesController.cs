@@ -6,7 +6,7 @@ using ShippingService.Entities;
 
 namespace ShippingService.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("/api/shipping-service/[controller]")]
     [ApiController]
     public class CountriesController : ControllerBase
     {

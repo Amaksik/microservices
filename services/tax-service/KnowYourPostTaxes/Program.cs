@@ -41,29 +41,29 @@ using (var scope = app.Services.CreateScope())
     context.Database.EnsureCreated();
 }
 
-app.MapPost("/tax/new", (TaxVM tax, TaxContext context) =>
+app.MapPost("api/tax-service/tax/new", (TaxVM tax, TaxContext context) =>
 {
     context.Taxes.Add(new Tax(tax.CountryName, tax.TaxRate));
     context.SaveChanges();
     return Results.Ok();
 });
 
-app.MapGet("/tax", (TaxContext context) => 
+app.MapGet("api/tax-service/tax", (TaxContext context) => 
     context.Taxes.Select(t => new { name = t.CountryName, tax = t.TaxRate }).ToList());
 
-app.MapPost("/tax", (TaxVM tax, TaxContext context) =>
+app.MapPost("api/tax-service/tax", (TaxVM tax, TaxContext context) =>
 {
     var res = context.Taxes.Where(t => t.CountryName.ToLower() == tax.CountryName.ToLower()).FirstOrDefault();
     return res == null ? Results.NotFound() : Results.Ok(res);
 });
 
-app.MapPost("/tax/exists", (TaxVM tax, TaxContext context) =>
+app.MapPost("api/tax-service/tax/exists", (TaxVM tax, TaxContext context) =>
 {
     var exists = context.Taxes.Any(t => t.CountryName == tax.CountryName && t.TaxRate == tax.TaxRate);
     return Results.Ok(exists);
 });
 
-app.MapDelete("/tax/{id}", (int id, TaxContext context) =>
+app.MapDelete("api/tax-service/tax/{id}", (int id, TaxContext context) =>
 {
     var tax = context.Taxes.Find(id);
     if (tax == null) return Results.NotFound();

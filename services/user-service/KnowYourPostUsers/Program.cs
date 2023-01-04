@@ -41,29 +41,29 @@ using (var scope = app.Services.CreateScope())
     context.Database.EnsureCreated();
 }
 
-app.MapPost("/user", (UserVM user, UserContext context) =>
+app.MapPost("/api/user-service/user", (UserVM user, UserContext context) =>
 {
     context.Users.Add(new User(user.Email, user.Password));
     context.SaveChanges();
     return Results.Ok();
 });
 
-app.MapGet("/user", (UserContext context) => 
+app.MapGet("/api/user-service/user", (UserContext context) => 
     context.Users.ToList());
 
-app.MapGet("/user/{id}", (int id, UserContext context) =>
+app.MapGet("/api/user-service/user/{id}", (int id, UserContext context) =>
 {
     var user = context.Users.Find(id);
     return user == null ? Results.NotFound() : Results.Ok(user);
 });
 
-app.MapPost("/user/exists", (UserVM user, UserContext context) =>
+app.MapPost("/api/user-service/user/exists", (UserVM user, UserContext context) =>
 {
     var exists = context.Users.Any(u => u.Email == user.Email && u.Password == user.Password);
     return Results.Ok(exists);
 });
 
-app.MapDelete("/user/{id}", (int id, UserContext context) =>
+app.MapDelete("/api/user-service/user/{id}", (int id, UserContext context) =>
 {
     var user = context.Users.Find(id);
     if (user == null) return Results.NotFound();

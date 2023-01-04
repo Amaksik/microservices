@@ -69,6 +69,6 @@ public class LoginModel : PageModel
             new ClaimsPrincipal(claimsIdentity),
             authProperties);
 
-        return RedirectToPage("/Index");
+        return RedirectToPage("/client/Index");
     }
 }

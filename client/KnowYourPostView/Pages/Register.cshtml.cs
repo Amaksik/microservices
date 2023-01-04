@@ -42,7 +42,7 @@ public class RegisterModel : PageModel
 
         if (response.IsSuccessStatusCode)
         {
-            return RedirectToPage("/Account/Login");
+            return RedirectToPage("/client/Login");
         }
 
         return Page();
