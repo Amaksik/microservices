@@ -1,0 +1,13 @@
+image:
+  name: client
+  tag: 1.0
+
+service:
+  ports:
+    - name: http
+      port: 80
+      containerPort: 80
+
+ingress:
+  path: /client
+  port: http
