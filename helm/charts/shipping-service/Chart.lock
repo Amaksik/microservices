@@ -1,0 +1,9 @@
+dependencies:
+- name: postgresql
+  repository: https://charts.bitnami.com/bitnami
+  version: 12.1.7
+- name: common
+  repository: file://../common
+  version: 0.1.0
+digest: sha256:f1d9085d5f338bf579e6e291adf537cfbdafd0774d4757a430bb030e266884c9
+generated: "2023-01-05T18:35:22.9108843+02:00"
