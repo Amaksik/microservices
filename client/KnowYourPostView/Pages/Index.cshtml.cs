@@ -114,8 +114,9 @@ public class IndexModel : PageModel
     {
         var RateServiceUrl = Environment.GetEnvironmentVariable("RATE_SERVICE_URL");
         using var client = _clientFactory.CreateClient();
-        var url = $"{RateServiceUrl}/api/Countries";
+        var url = $"{RateServiceUrl}/Countries";
         if (id != null) url += $"/{id}";
+        Console.WriteLine("url1 = " + url);
 
         var response = await client.GetAsync(url);
 
@@ -130,7 +131,8 @@ public class IndexModel : PageModel
     {
         var RateServiceUrl = Environment.GetEnvironmentVariable("RATE_SERVICE_URL");
         using var client = _clientFactory.CreateClient();
-        var url = $"{RateServiceUrl}/api/Services/{originId}/{destId}";
+        var url = $"{RateServiceUrl}/Services/{originId}/{destId}";
+        Console.WriteLine("url2 = " + url);
 
         var response = await client.GetAsync(url);
 
