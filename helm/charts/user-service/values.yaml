@@ -1,0 +1,31 @@
+image:
+  name: user-service
+  tag: 1.0
+
+postgresql:
+  nameOverride: user-postgres
+  fullnameOverride: user-postgres
+  postgresqlDatabase: 'user-service'
+  postgresqlUsername: 'root'
+  postgresqlPassword: 'root'
+  persistence:
+    size: 1Gi
+    mountPath: /var/lib/pg/data/users
+
+configs:
+  DATABASE_NAME: user-service
+  DATABASE_HOST: user-postgres
+
+secrets:
+  DATABASE_USER: 'cm9vdA=='
+  DATABASE_PASSWORD: 'cm9vdA=='
+
+service:
+  ports:
+    - name: http
+      port: 80
+      containerPort: 80
+
+ingress:
+  path: /api/user-service
+  port: http
