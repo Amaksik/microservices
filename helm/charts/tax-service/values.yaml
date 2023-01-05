@@ -1,6 +1,6 @@
 image:
   name: tax-service
-  tag: 1.0
+  tag: '1.0'
 
 postgresql:
   nameOverride: tax-postgres
