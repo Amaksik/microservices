@@ -11,3 +11,8 @@ service:
 ingress:
   path: /client
   port: http
+
+configs:
+  USER_SERVICE_URL: http://192.168.49.2/api/user-service
+  TAX_SERVICE_URL: http://192.168.49.2/api/tax-service
+  RATE_SERVICE_URL: http://192.168.49.2/api/shipping-service

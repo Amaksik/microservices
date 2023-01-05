@@ -3,14 +3,15 @@ image:
   tag: '1.0'
 
 postgresql:
-  nameOverride: user-postgres
   fullnameOverride: user-postgres
-  postgresqlDatabase: 'user-service'
-  postgresqlUsername: 'root'
-  postgresqlPassword: 'root'
-  persistence:
-    size: 1Gi
-    mountPath: /var/lib/pg/data/users
+  auth:
+    database: 'user-service'
+    username: 'root'
+    password: 'root'
+  primary: 
+    persistence:
+      size: 256Mi
+      mountPath: /var/lib/pg/data/user-service
 
 configs:
   DATABASE_NAME: user-service
