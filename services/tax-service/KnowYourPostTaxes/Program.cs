@@ -1,7 +1,11 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
+using Confluent.Kafka;
+using KnowYourPostTaxes;
 using KnowYourPostTaxes.Data;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using HostedServices = Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +17,15 @@ var database = Environment.GetEnvironmentVariable("DATABASE_NAME");
 var connectionString = $"server={host};database={database};username={user};password={password}";
 Console.WriteLine(connectionString);
 Console.WriteLine(connectionString);
+
+
+var kafka_host = Environment.GetEnvironmentVariable("KAFKA_HOST");
+
+var prodConfig = new ProducerConfig()
+{
+    BootstrapServers = kafka_host
+};
+builder.Services.AddSingleton<ProducerConfig>(prodConfig);
 
 // Add services to the container.
 builder.Services.AddDbContext<TaxContext>(ops => 
@@ -41,8 +54,13 @@ using (var scope = app.Services.CreateScope())
     context.Database.EnsureCreated();
 }
 
-app.MapPost("api/tax-service/tax/new", (TaxVM tax, TaxContext context) =>
+app.MapPost("api/tax-service/tax/new", (TaxVM tax, TaxContext context, ProducerConfig config) =>
 {
+    //kafka update
+    var producer = new ProducerWrapper(config);
+    var upd = JsonConvert.SerializeObject(tax.CountryName);
+    producer.writeMessage(upd);
+    Console.WriteLine(upd);
     context.Taxes.Add(new Tax(tax.CountryName, tax.TaxRate));
     context.SaveChanges();
     return Results.Ok();
