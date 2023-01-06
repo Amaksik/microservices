@@ -1,0 +1,11 @@
+memory per container
+sum by(pod) (container_memory_usage_bytes{namespace="default"})
+
+restarts per container
+sum by(pod) (kube_pod_container_status_restarts_total{namespace="default"})
+
+cpu per container
+sum by(pod) (container_cpu_user_seconds_total{namespace="default"})
+
+% pods available
+sum by(pod) (kube_deployment_status_replicas_available{namespace="default"}) / sum by(pod) (kube_deployment_status_replicas{namespace="default"})
