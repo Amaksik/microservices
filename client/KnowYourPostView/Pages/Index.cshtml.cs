@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Authorization;
+using Polly;
 
 namespace KnowYourPostView.Pages;
 
@@ -13,14 +14,17 @@ public class IndexModel : PageModel
     private readonly ILogger<IndexModel> _logger;
     private readonly IHttpClientFactory _clientFactory;
     private readonly IConfiguration _configuration;
+    private readonly IAsyncPolicy<HttpResponseMessage> _policy;
 
     public IndexModel(ILogger<IndexModel> logger, 
         IHttpClientFactory clientFactory,
-        IConfiguration configuration)
+        IConfiguration configuration,
+        IAsyncPolicy<HttpResponseMessage> policy)
     {
         _logger = logger;
         _clientFactory = clientFactory;
         _configuration = configuration;
+        _policy = policy;
     }
 
     [FromQuery(Name = "id")]
@@ -78,9 +82,9 @@ public class IndexModel : PageModel
     {
         try 
         {
-            var TaxServiceUrl = Environment.GetEnvironmentVariable("TAX_SERVICE_URL");
+            var TaxServiceUrl = Environment.GetEnvironmentVariable("TAX_SERVICE_URL") ?? "http://localhost:5000";
             using var client = _clientFactory.CreateClient();
-            var response = await client.GetAsync($"{TaxServiceUrl}/tax");
+            var response = await _policy.ExecuteAsync(() => client.GetAsync($"{TaxServiceUrl}/tax"));
 
             if (!response.IsSuccessStatusCode)
                 throw new Exception("Error calling service 2");
@@ -112,13 +116,13 @@ public class IndexModel : PageModel
 
     private async Task<List<CountryModel>?> GetCountries(int? id = null)
     {
-        var RateServiceUrl = Environment.GetEnvironmentVariable("RATE_SERVICE_URL");
+        var RateServiceUrl = Environment.GetEnvironmentVariable("RATE_SERVICE_URL") ?? "http://localhost:5000";
         using var client = _clientFactory.CreateClient();
         var url = $"{RateServiceUrl}/Countries";
         if (id != null) url += $"/{id}";
         Console.WriteLine("url1 = " + url);
 
-        var response = await client.GetAsync(url);
+        var response = await _policy.ExecuteAsync(() => client.GetAsync(url));
 
         if (!response.IsSuccessStatusCode)
             throw new Exception("Error calling service 2");
@@ -129,12 +133,12 @@ public class IndexModel : PageModel
 
     private async Task<List<CompanyModel>> GetCompanies(int originId, int destId)
     {
-        var RateServiceUrl = Environment.GetEnvironmentVariable("RATE_SERVICE_URL");
+        var RateServiceUrl = Environment.GetEnvironmentVariable("RATE_SERVICE_URL") ?? "http://localhost:5000";
         using var client = _clientFactory.CreateClient();
         var url = $"{RateServiceUrl}/Services/{originId}/{destId}";
         Console.WriteLine("url2 = " + url);
 
-        var response = await client.GetAsync(url);
+        var response = await _policy.ExecuteAsync(() => client.GetAsync(url));
 
         if (!response.IsSuccessStatusCode)
             throw new Exception("Error calling service 2");
