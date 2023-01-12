@@ -11,7 +11,7 @@ postgresql:
   primary: 
     persistence:
       size: 256Mi
-      mountPath: /var/lib/pg/data/user-service
+      mountPath: /var/lib/postgres/user-service
 
 configs:
   DATABASE_NAME: user-service

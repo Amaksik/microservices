@@ -11,7 +11,7 @@ postgresql:
   primary: 
     persistence:
       size: 256Mi
-      mountPath: /var/lib/pg/data/tax-service
+      mountPath: /var/lib/postgres/tax-service
 
 configs:
   DATABASE_NAME: tax-service

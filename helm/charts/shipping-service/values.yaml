@@ -11,7 +11,7 @@ postgresql:
   primary: 
     persistence:
       size: 256Mi
-      mountPath: /var/lib/pg/data/shipping-service
+      mountPath: /var/lib/postgres/shipping-service
 
 configs:
   DATABASE_NAME: shipping-service
