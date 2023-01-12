@@ -66,8 +66,16 @@ app.MapPost("api/tax-service/tax/new", (TaxVM tax, TaxContext context, ProducerC
     return Results.Ok();
 });
 
-app.MapGet("api/tax-service/tax", (TaxContext context) => 
-    context.Taxes.Select(t => new { name = t.CountryName, tax = t.TaxRate }).ToList());
+app.MapGet("api/tax-service/tax", (TaxContext context) =>
+{
+    var random = new Random();
+    if (random.Next(0, 100) < 50)
+    {
+        Console.WriteLine("!!! RANDOM ERROR OCCURED: TAX-SERVICE WILL RETURN CODE 500 !!!");
+        throw new Exception("Something went wrong");
+    }
+    return Results.Ok(context.Taxes.Select(t => new { name = t.CountryName, tax = t.TaxRate }).ToList());
+});
 
 app.MapPost("api/tax-service/tax", (TaxVM tax, TaxContext context) =>
 {
